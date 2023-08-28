@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ApiAuth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class ApiAuthController extends Controller
@@ -65,68 +67,80 @@ class ApiAuthController extends Controller
                     'message' => "Something Went Wrong"
                 ], 500);
             }
-            
-
-
-            // try {
-            //     $user = ApiAuth::create([
-            //         'name' => $request->name,
-            //         'email' => $request->email,
-            //         'phone' => $request->phone,
-            //         'password' => bcrypt($request->password),
-            //     ]);
-            
-            //     $token = $user->createToken('authToken')->plainTextToken;
-            
-            //     return response()->json([
-            //         'status' => 200,
-            //         'success' => true,
-            //         'user' => $user,
-            //         'token' => $token,
-            //         'message' => "Account created successfully"
-            //     ], 200);
-                
-            // } catch (\Illuminate\Database\QueryException $e) {
-            //     $errorCode = $e->errorInfo[1];
-            //     if($errorCode == 1062){
-            //         return response()->json([
-            //             'status' => 409, // conflict status code
-            //             'message' => 'Email already in use'
-            //         ], 409);
-            //     }
-            //     return response()->json([
-            //         'status' => 500,
-            //         'message' => "Something Went Wrong"
-            //     ], 500);
-            // }
-
-            // $user = ApiAuth::create([
-            //     'name' => $request->name,
-            //     'email' => $request->email,
-            //     'phone' => $request->phone,
-            //     'password' => bcrypt($request->password),
-            // ]);
-
-            // $token = $user->createToken('authToken')->plainTextToken;
-
-            // if($user) {
-
-            //     return response()->json([
-            //         'status' => 200,
-            //         'success' => true,
-            //         'user' => $user,
-            //         'token' => $token,
-            //         'message' => "Account created successfully"
-            //     ],200);
-
-            // } else {
-            //     return response()->json([
-            //         'status' => 500,
-            //         'message' => "Something Went Wrong"
-            //     ],500);
-            // }
 
         }
 
+        
     }
+
+
+    public function login(Request $request) {
+        
+        // Validate request data
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string|min:8'
+        ]);
+
+        // If validation fails, return the error messages
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->messages()
+            ], 422);
+        }
+
+        // Fetch user by email
+        $user = ApiAuth::where('email', $request->email)->first();
+
+        // If user found and password matches
+        if ($user && Hash::check($request->password, $user->password)) {
+            $token = $user->createToken('authToken')->plainTextToken;
+
+            return response()->json([
+                'success' => true,
+                'user' => $user,
+                'token' => $token
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid login credentials'
+            ], 401);
+        }
+    }
+
+
+
+    // public function login(Request $request) {
+
+    //     $credentials = $request->only('email', 'password');
+        
+    //     if (ApiAuth::attempt($credentials)) {
+    //         $user = ApiAuth::user();
+    //         $token = $user->createToken('authToken')->plainTextToken;
+    
+    //         return response()->json([
+    //             'success' => true,
+    //             'user' => $user,
+    //             'token' => $token
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Invalid login credentials'
+    //         ], 401);
+    //     }
+    // }
+    
+
+
+
+
+
+
+
+
+
+
 }
