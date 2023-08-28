@@ -111,28 +111,36 @@ class ApiAuthController extends Controller
     }
 
 
-
-    // public function login(Request $request) {
-
-    //     $credentials = $request->only('email', 'password');
-        
-    //     if (ApiAuth::attempt($credentials)) {
-    //         $user = ApiAuth::user();
-    //         $token = $user->createToken('authToken')->plainTextToken;
+    // public function logout() {
+    //     // Get the currently authenticated user
+    //     $user = ApiAuth::user();
     
-    //         return response()->json([
-    //             'success' => true,
-    //             'user' => $user,
-    //             'token' => $token
-    //         ]);
-    //     } else {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Invalid login credentials'
-    //         ], 401);
-    //     }
+    //     // Revoke the user's token
+    //     $user->tokens()->where('id', $user->currentAccessToken()->id)->delete();
+    
+    //     return response()->json(['success' => true, 'message' => 'Logged out successfully']);
     // }
+
+    // public function logout(Request $request) {
+    //     // Get the currently authenticated user
+    //     $user = ApiAuth::user();
     
+    //     // Revoke the user's token
+    //     $user->tokens()->where('id', $user->currentAccessToken()->id)->delete();
+    
+    //     return response()->json(['success' => true, 'message' => 'Logged out successfully']);
+    // }
+
+    public function logout(Request $request) {
+        // Revoke the user's current token
+        $request->user()->currentAccessToken()->delete();
+    
+        // Return a successful response
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+    
+    
+
 
 
 

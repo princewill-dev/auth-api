@@ -17,4 +17,8 @@ class ApiAuth extends Model
         'phone',
         'password'
     ];
+
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 }

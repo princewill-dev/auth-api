@@ -20,6 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::post('/register', [ApiAuthController::class, 'register']);
+Route::post('/register', [ApiAuthController::class, 'register'])->name('register');
 
-Route::post('/login', [ApiAuthController::class, 'login']);
+Route::post('/login', [ApiAuthController::class, 'login'])->name('login');
+
+Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout')->middleware(['auth:sanctum']);
