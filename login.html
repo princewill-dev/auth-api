@@ -68,6 +68,8 @@
 		<!-- RESPONSIVE CSS -->
 		<link href="css/responsive.css" rel="stylesheet">
 
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 	</head>
 
 
@@ -170,24 +172,27 @@
 									<!-- LOGIN FORM -->
 									<div class="col-md-6">
 										<div class="register-page-form">
-											<form name="signinform" class="row sign-in-form">
+											<form class="row sign-in-form" id="loginForm">
 
 												<!-- Google Button -->	
-												<div class="col-md-12">
+												<!-- <div class="col-md-12">
 													<a  href="#" class="btn btn-google ico-left">
 														<img src="images/png_icons/google.png" alt="google-icon"> Sign in with Google
 													</a>
-												</div>  
+												</div>   -->
 
 												<!-- Login Separator -->
 												<div class="col-md-12 text-center">	
-													<div class="separator-line">Or, sign in with your email</div>
+													<div class="separator-line">Welcome please login to continue</div>
+
+													<div id="errormsg"></div>
+													
 												</div>
 
 												<!-- Form Input -->	
 												<div class="col-md-12">
 													<p class="p-sm input-header">Email address</p>
-													<input class="form-control email" type="email" name="email" placeholder="example@example.com"> 
+													<input class="form-control email" type="email" name="email" id="email" placeholder="example@example.com"> 
 												</div>
 
 												<!-- Form Input -->	
@@ -195,7 +200,7 @@
 													<p class="p-sm input-header">Password</p>
 													<div class="wrap-input">
 														<span class="btn-show-pass ico-20"><span class="flaticon-visibility eye-pass"></span></span>
-														<input class="form-control password" type="password" name="password" placeholder="* * * * * * * * *"> 
+														<input class="form-control password" type="password" name="password" id="password" placeholder="* * * * * * * * *"> 
 													</div>
 												</div>
 
@@ -214,11 +219,41 @@
 												<!-- Sign Up Link -->	
 												<div class="col-md-12">
 													<p class="create-account text-center">
-														Don't have an account? <a href="signup-2.html" class="color--theme">Sign up</a>
+														Don't have an account? <a href="signup.html" class="color--theme">Sign up</a>
 													</p>
 												</div>  
 
-											</form> 
+											</form>
+
+
+											<script>
+												$("#loginForm").submit(function(event){
+													event.preventDefault(); // Prevent default form submission
+													
+													$.ajax({
+														url: 'http://127.0.0.1:8000/api/login', // Replace with your Laravel API login endpoint
+														type: 'POST',
+														data: $(this).serialize(),
+														success: function(response){
+															if(response.success) {
+																localStorage.setItem('user', JSON.stringify(response.user)); // Store user data
+																localStorage.setItem('token', response.token); // Store auth token
+																window.location.href = "./dashboard.html"; // Redirect to dashboard
+															} else {
+																// Display error message from API to the errormsg element
+																$('#errormsg').text(response.message);
+															}
+														},
+														error: function(xhr, status, error){
+															// Extract the error message from the response and display it in the errormsg element
+															var errorMsg = JSON.parse(xhr.responseText).message || "An error occurred.";
+															$('#errormsg').text(errorMsg);
+														}
+													});
+												});
+											</script>
+
+
 										</div>
 									</div>	<!-- END LOGIN FORM -->
 

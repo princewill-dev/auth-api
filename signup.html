@@ -68,6 +68,11 @@
 		<!-- RESPONSIVE CSS -->
 		<link href="css/responsive.css" rel="stylesheet">
 
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 	</head>
 
 
@@ -170,7 +175,7 @@
 									<!-- LOGIN FORM -->
 									<div class="col-md-6">
 										<div class="register-page-form">
-											<form name="signinform" class="row sign-in-form" id="registrationForm">
+											<form class="row sign-in-form" id="signupForm">
 
 												<!-- Google Button -->	
 												<div class="col-md-12">
@@ -183,8 +188,7 @@
 												<div class="col-md-12 text-center">	
 													<div class="separator-line">Or, sign in with your email</div>
 
-													<div id="message" class="mt-3"></div>
-
+													<div id="errormsg" style="color: red;"></div>
 
 												</div>
 
@@ -228,37 +232,61 @@
 												<!-- Sign Up Link -->	
 												<div class="col-md-12">
 													<p class="create-account text-center">
-														Already have an account? <a href="login.html" class="color--theme">Login</a>
+														Already have an account? <a href="login.html" class="color--theme">Create Account</a>
 													</p>
 												</div>  
 
 											</form>
 
-
 											<script>
-												$('#registrationForm').on('submit', function(e) {
-													e.preventDefault();
-										
-													var formData = {
-														name: $('#name').val(),
-														email: $('#email').val(),
-														email: $('#phone').val(),
-														password: $('#password').val(),
-													};
-										
+
+												$("#signupForm").submit(function(event){
+													event.preventDefault(); // Prevent default form submission
+
 													$.ajax({
-														url: './backen/api/register',
+														url: 'http://127.0.0.1:8000/api/register', // Replace with your Laravel API endpoint
 														type: 'POST',
-														data: JSON.stringify(formData),
-														contentType: 'application/json',
-														success: function(response) {
-															$('#message').text(response.message).addClass('alert alert-success');
+														data: $(this).serialize(),
+														success: function(response){
+															if(response.success) {
+																localStorage.setItem('user', JSON.stringify(response.user)); // Store user data
+																localStorage.setItem('token', response.token); // Store auth token
+																window.location.href = "./login.html"; // Redirect to dashboard
+															} else {
+																// Display error message from API to the errormsg element
+																$('#errormsg').text(response.message);
+															}
 														},
-														error: function(error) {
-															$('#message').text('Registration failed').addClass('alert alert-danger');
+														error: function(xhr, status, error){
+															// Extract the error message from the response and display it in the errormsg element
+															var errorMsg = JSON.parse(xhr.responseText).message || "An error occurred.";
+															$('#errormsg').text(errorMsg);
 														}
 													});
 												});
+
+
+												// $("#signupForm").submit(function(event){
+												// 	event.preventDefault(); // Prevent default form submission
+											
+												// 	$.ajax({
+												// 		url: 'http://127.0.0.1:8000/api/register', // Replace with your Laravel API endpoint
+												// 		type: 'POST',
+												// 		data: $(this).serialize(),
+												// 		success: function(response){
+												// 			if(response.success) {
+												// 				localStorage.setItem('user', JSON.stringify(response.user)); // Store user data
+												// 				localStorage.setItem('token', response.token); // Store auth token
+												// 				window.location.href = "./login.html"; // Redirect to dashboard
+												// 			} else {
+												// 				alert(response.message); // Display error message from API
+												// 			}
+												// 		},
+												// 		error: function(xhr, status, error){
+												// 			alert("An error occurred: " + xhr.responseText);
+												// 		}
+												// 	});
+												// });
 											</script>
 
 
