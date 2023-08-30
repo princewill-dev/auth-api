@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>API Demo</title>
+<meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<div id="results"></div>
+<script>
+$(document).ready(function() {
+  // Fetch the JSON data from the API.
+  $.getJSON("http://127.0.0.1:8000/api/show", function(data) {
+    // Create HTML elements to display the data.
+    const ul = document.createElement("ul");
+
+    for (const item of data) {
+      const li = document.createElement("li");
+      li.textContent = item.name;
+      ul.appendChild(li);
+    }
+
+    // Append the HTML elements to the DOM.
+    document.getElementById("results").appendChild(ul);
+  });
+});
+</script>
+</body>
+</html>

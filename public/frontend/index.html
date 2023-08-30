@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Call Example</title>
+
+    <style>
+        #api-result {
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 300px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+        dt {
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <form id="memberForm">
+        <label for="memberId">Enter Member ID:</label>
+        <input type="number" id="memberId" name="memberId" required>
+        <button type="submit">Fetch Member</button>
+    </form>
+
+    <h1>API Call Result:</h1>
+    <pre id="api-result">Loading...</pre>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

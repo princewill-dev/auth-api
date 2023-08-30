@@ -11,6 +11,69 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiAuthController extends Controller
 {
+
+
+    public function show() {
+
+        $members = ApiAuth::all();
+
+        if($members->count() > 0 ) {
+            return response()->json([
+                'status' => 200,
+                'members' => $members
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 400,
+                'message' => 'user does not exit'   
+            ], 200);
+        }
+
+    }
+
+    // public function showMember($id) {
+
+    //     // Fetch the member using the $id
+    //     $member = ApiAuth::find($id);
+    
+    //     // If the member is found
+    //     if($member) {
+    //         return response()->json([
+    //             'status' => 200,
+    //             'member' => $member
+    //         ], 200);
+    //     } else {
+    //         return response()->json([
+    //             'status' => 400,
+    //             'message' => 'No record found for the provided ID'   
+    //         ], 200);
+    //     }
+    // }
+
+    public function showMember($id) {
+
+        // Fetch the member using the provided ID
+        $member = ApiAuth::find($id);
+    
+        // If the member exists
+        if($member) {
+            return response()->json([
+                'status' => 200,
+                'member' => $member
+            ], 200);
+        } else {
+            // Return a 404 Not Found status when the member doesn't exist
+            return response()->json([
+                'status' => 404,
+                'message' => 'User does not exist'   
+            ], 404);
+        }
+    }
+    
+    
+
+    
+
     public function register(Request $request) {
 
         $validator = Validator::make($request->all(), [
