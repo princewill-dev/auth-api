@@ -6,8 +6,8 @@
     RewriteEngine On
 
     # Handle Authorization Header
-    # RewriteCond %{HTTP:Authorization} .
-    # RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -20,6 +20,6 @@
     RewriteRule ^ index.php [L]
     
     # ... redirect the request to the public directory
-    RewriteRule ^(.*)$ public/$1 [L]
+    # RewriteRule ^(.*)$ public/$1 [L]
     
 </IfModule>
