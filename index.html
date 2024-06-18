@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mac Terminal Simulator</title>
+    <style>
+        body {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #013E5C; /* Changed background color */
+            color: #FFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0; /* Resetting default margin */
+        }
+
+        #container {
+            width: 90%; /* Default for mobile devices and tablets */
+            box-sizing: border-box;
+        }
+        
+        /* Media Query for larger screens (like desktops) */
+        @media (min-width: 768px) { /* This can be adjusted based on your preference. 768px is a common breakpoint between tablets and desktops */
+            #container {
+                width: 50%;
+            }
+        }
+
+        #top-section {
+            height: 40px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .close {
+            background-color: #FF5F57;
+        }
+
+        .minimize {
+            background-color: #FFBD2E;
+        }
+
+        .maximize {
+            background-color: #27C93F;
+        }
+
+        #terminal {
+            height: 420px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #666;
+            background-color: #2E3440; /* Changed internal background color */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Added box-shadow */
+            border-radius: 0 0 10px 10px;
+        }
+
+        #inputLine {
+            display: flex;
+            align-items: center;
+        }
+
+        #prompt {
+            margin-right: 5px;
+        }
+
+        #input {
+            width: 100%;
+            background-color: #2E3440; /* Changing input background to match terminal */
+            color: #FFF;
+            border: none;
+            outline: none;
+        }
+        
+        #greeting {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    
+    
+
+<div id="container">
+    
+    <center>
+        <h3 id="greeting">welcome, type help to get started</h3>
+    </center>
+    
+    <div id="top-section">
+        <div class="button close"></div>
+        <div class="button minimize"></div>
+        <div class="button maximize"></div>
+    </div>
+    <div id="terminal">
+        <div id="output"></div>
+        <div id="inputLine">
+            <div id="prompt">Terminal:~$</div>
+            <input type="text" id="input" autofocus>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
